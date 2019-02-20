@@ -8,10 +8,15 @@ require 'vendor/phpmailer/src/SMTP.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim(filter_input(INPUT_POST, "name", FILTER_SANITIZE_STRING));
     $email = trim(filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL));
+    $category = trim(filter_input(INPUT_POST, "category", FILTER_SANITIZE_STRING));
+    $title = trim(filter_input(INPUT_POST, "title", FILTER_SANITIZE_STRING));
+    $format = trim(filter_input(INPUT_POST, "format", FILTER_SANITIZE_STRING));
+    $genre = trim(filter_input(INPUT_POST, "genre", FILTER_SANITIZE_STRING));
+    $year = trim(filter_input(INPUT_POST, "year", FILTER_SANITIZE_NUMBER_INT));
     $details = trim(filter_input(INPUT_POST, "details", FILTER_SANITIZE_SPECIAL_CHARS));
 
-    if ($name == "" || $email == "" || $details == "") {
-        echo "Please fill in the required fields: Name, Email and Details";
+    if ($name == "" || $email == "" || $category == "" || $title == "") {
+        echo "Please fill in the required fields: Name, Email, Category and Title";
         exit;
     }
 
@@ -28,6 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email_body = '';
     $email_body .= 'Name: ' . $name . "\n";
     $email_body .= 'Email: ' . $email . "\n";
+    $email_body .= "\n\nSuggested Item\n\n";
+    $email_body .= 'Category: ' . $category . "\n";
+    $email_body .= 'Title: ' . $title . "\n";
+    $email_body .= 'Format: ' . $format . "\n";
+    $email_body .= 'Genre: ' . $genre . "\n";
+    $email_body .= 'Year: ' . $year . "\n";
     $email_body .= 'Details: ' . $details . "\n";
 
     $mail = new PHPMailer;
@@ -98,12 +109,14 @@ include("inc/header.php");
         <form method="post" action="suggest.php" >
             <table>
                 <tr>
-                    <th><label for="name">Name</label></th>
-                    <td><input type="text" name="name" id="name"></td>
+                    <th><label for="name">Name (required)</label></th>
+                    <td><input type="text" name="name" id="name" value="<?php
+                    if (isset($name)) echo $name; ?>"></td>
                 </tr>
                 <tr>
-                    <th><label for="email">Email</label></th>
-                    <td><input type="text" name="email" id="email"></td>
+                    <th><label for="email">Email (required)</label></th>
+                    <td><input type="text" name="email" id="email" value="<?php
+                    if (isset($email)) echo $email; ?>"></td>
                 </tr>
                 <tr>
                     <th><label for="category">Category</label></th>
@@ -115,8 +128,9 @@ include("inc/header.php");
                     </select></td>
                 </tr>
                 <tr>
-                    <th><label for="title">Title</label></th>
-                    <td><input type="text" name="title" id="title"></td>
+                    <th><label for="title">Title (required)</label></th>
+                    <td><input type="text" name="title" id="title" value="<?php
+                    if (isset($title)) echo $title; ?>"></td>
                 </tr>
                 <tr>
                     <th><label for="format">Format</label></th>
@@ -218,11 +232,14 @@ include("inc/header.php");
                 </tr>
                 <tr>
                     <th><label for="year">Year</label></th>
-                    <td><input type="text" name="year" id="year"></td>
+                    <td><input type="text" name="year" id="year" value="<?php
+                    if (isset($year)) echo $year; ?>"></td>
                 </tr>
                 <tr>
                     <th><label for="name">Suggest Item Details</label></th>
-                    <td><textarea name="details" id="details"></textarea></td>
+                    <td><textarea name="details" id="details"><?php
+                    if (isset($details)) echo htmlspecialchars($details);
+                    ?></textarea></td>
                 </tr>
                 <tr style="display:none">
                     <th><label for="address">Address</label></th>
