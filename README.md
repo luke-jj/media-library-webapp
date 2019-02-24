@@ -1,8 +1,7 @@
 # Media Library
 
 
-
-## Setting up SMTP automatic email service
+## Setting up SMTP for PHPMailer's automatic email service
 ### Creating an App Password with Google
 - Visit myaccount.google.com
 - Choose "Sign-in & security
